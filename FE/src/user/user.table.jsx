@@ -4,18 +4,7 @@ import { useEffect, useState } from "react";
 
 const UserTable = () => {
 
-    const [dataUsers, setDataUsers] = useState([
-        {
-            _id: '985643',
-            fullname: 'John Brown',
-            email: 'john.brown@example.com',
-        },
-        {
-            _id: '2123123',
-            fullname: 'Jim Green',
-            email: 'jim.green@example.com',
-        }
-    ]);
+    const [dataUsers, setDataUsers] = useState([]);
 
     useEffect(() => {
         console.log('Component UserTable mounted');
