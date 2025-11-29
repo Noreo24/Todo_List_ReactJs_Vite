@@ -45,7 +45,8 @@ const router = createBrowserRouter([
 
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+  // <StrictMode> 
+  // StrictMode làm React chạy ở chế độ StrictMode (chế độ nghiêm ngặt) - nghĩa là nó sẽ kiểm tra và cảnh báo về các vấn đề tiềm ẩn trong ứng dụng của bạn, giúp bạn phát hiện lỗi sớm hơn trong quá trình phát triển.
+  <RouterProvider router={router} />
+  // </StrictMode>,
 )
