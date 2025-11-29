@@ -32,7 +32,10 @@ const UserPage = () => {
     return (
         <div style={{ padding: "20px" }}>
             <CreateUserModal loadUser={loadUser} />
-            <UserTable dataUsers={dataUsers} />
+            <UserTable
+                dataUsers={dataUsers}
+                loadUser={loadUser}
+            />
         </div>
     );
 }
