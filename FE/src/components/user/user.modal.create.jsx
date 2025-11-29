@@ -1,13 +1,14 @@
 import { Button, Input, notification, Modal } from "antd";
 import { useState } from "react";
-import { createUserAPI } from "../services/api.service";
+import { createUserAPI } from "../../services/api.service";
 
-const UserForm = () => {
+const CreateUserModal = (props) => {
     const [fullName, setFullName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
+    const loadUser = props;
 
     const handleSubmit = async () => {
         const response = await createUserAPI(fullName, email, password, phone);
@@ -16,7 +17,8 @@ const UserForm = () => {
                 message: "User created successfully",
                 description: `User ID: ${response.data.id}`
             })
-            setIsModalOpen(false);
+            resetForm();
+            await loadUser();
         } else {
             notification.error({
                 message: "User creation failed",
@@ -25,20 +27,28 @@ const UserForm = () => {
         }
     }
 
+    const resetForm = () => {
+        setFullName("");
+        setEmail("");
+        setPassword("");
+        setPhone("");
+        setIsModalCreateOpen(false);
+    }
+
     return (
-        <div className="user-form" style={{ margin: "10px 10px" }}>
+        <div className="user-form" style={{ margin: "10px 0" }}>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
                 <h3> Table User</h3>
                 <Button
                     type="primary"
-                    onClick={() => setIsModalOpen(true)}>Submit
+                    onClick={() => setIsModalCreateOpen(true)}>Submit
                 </Button>
             </div>
             <Modal
                 title="Create New User"
-                open={isModalOpen}
+                open={isModalCreateOpen}
                 onOk={() => handleSubmit()}
-                onCancel={() => setIsModalOpen(false)}
+                onCancel={() => resetForm()}
                 maskClosable={false}
                 okText={"Create User"}
             >
@@ -73,4 +83,4 @@ const UserForm = () => {
     )
 }
 
-export default UserForm;
+export default CreateUserModal;
