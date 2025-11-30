@@ -1,8 +1,9 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Table } from "antd";
+import { notification, Popconfirm, Table } from "antd";
 import UpdateUserModal from "./user.modal.update";
 import { useState } from "react";
 import UserDetailModal from "./user.modal.detail";
+import { deleteUserAPI } from "../../services/api.service";
 
 const UserTable = (props) => {
 
@@ -53,12 +54,37 @@ const UserTable = (props) => {
                             }}
                             style={{ cursor: "pointer", color: "orange" }}
                         />
-                        <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+                        <Popconfirm
+                            title="Delete the user"
+                            description="Are you sure to delete this user?"
+                            onConfirm={() => handleDeleteUser(record._id)}
+                            okText="Yes"
+                            cancelText="No"
+                            placement="leftTop"
+                        >
+                            <DeleteOutlined style={{ cursor: "pointer", color: "red" }} />
+                        </Popconfirm>
                     </div>
                 )
             }
         },
     ];
+
+    const handleDeleteUser = async (id) => {
+        const res = await deleteUserAPI(id);
+        if(res.data) {
+            notification.success({
+                message: "Delete User",
+                description: "User deleted successfully!"
+            })
+            await loadUser();
+        } else {
+            notification.error({
+                message: "Delete User",
+                description: JSON.stringify(res.message)
+            })
+        }
+    }
 
     return (
         <>
