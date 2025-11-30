@@ -10,7 +10,6 @@ const UserPage = () => {
             _id: '985643',
             fullName: 'John Brown',
             email: 'john.brown@example.com',
-            phone: '123-456-7890'
         },
         {
             _id: '2123123',
