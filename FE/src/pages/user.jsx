@@ -10,12 +10,15 @@ const UserPage = () => {
             _id: '985643',
             fullName: 'John Brown',
             email: 'john.brown@example.com',
+            avatar: 'ee11cbb19052e40b07aac0ca060c23ee.png'
         },
         {
             _id: '2123123',
             fullName: 'Jim Green',
+            
             email: 'jim.green@example.com',
-            phone: '987-654-3210'
+            phone: '987-654-3210',
+            avatar: '21232f297a57a5a743894a0e4a801fc3.png'
         }
     ]);
 
