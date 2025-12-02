@@ -1,9 +1,10 @@
-import { Button, Drawer } from "antd";
+import { Button, Drawer, notification } from "antd";
 import { useState } from "react";
+import { uploadFileAPI } from "../../services/api.service";
 
 const UserDetailModal = (props) => {
 
-    const { isModalDetailOpen, setIsModalDetailOpen, dataDetail, setDataDetail } = props;
+    const { isModalDetailOpen, setIsModalDetailOpen, dataDetail, setDataDetail, loadUser } = props;
     const [selectedFile, setSelectedFile] = useState(null);
     const [previewUrl, setPreviewUrl] = useState(null);
 
@@ -24,7 +25,37 @@ const UserDetailModal = (props) => {
             setPreviewUrl(URL.createObjectURL(file));
         }
     }
-    console.log("Selected file:", previewUrl);
+
+    const handleUpdateAvatar = async () => {
+        // Upload file
+        const resUpload = await uploadFileAPI(selectedFile, "avatar");
+        if (resUpload.data) {
+            const newAvatar = resUpload.data.fileUploaded;
+            // Update user's avatar
+            const resUpdateAvatar = await updateUserAvatarAPI(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone);
+            if (resUpdateAvatar.data) {
+                setIsModalDetailOpen(false);
+                setSelectedFile(null);
+                setPreviewUrl(null);
+                await loadUser();
+
+                notification.success({
+                    message: "Update user's avatar.",
+                    description: "Update avatar successfully."
+                });
+            } else {
+                notification.error({
+                    message: "Update user's avatar failed.",
+                    description: JSON.stringify(resUpdateAvatar.message)
+                })
+            }
+        } else {
+            notification.error({
+                message: "Upload avatar failed.",
+                description: JSON.stringify(resUpload.message)
+            })
+        }
+    }
 
 
     return (
@@ -82,20 +113,24 @@ const UserDetailModal = (props) => {
 
                     {/* Preview of uploaded avatar */}
                     {previewUrl &&
-                        <div
-                            style={{
-                                marginTop: "10px",
-                                height: "150px",
-                                width: "150px",
-                                border: "1px solid #ccc",
-                            }}
-                        >
-                            <img
-                                src={previewUrl}
-                                alt="User Avatar"
-                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                            />
-                        </div>
+                        <>
+                            <div
+                                style={{
+                                    marginTop: "10px",
+                                    marginBottom: "10px",
+                                    height: "150px",
+                                    width: "150px"
+                                }}
+                            >
+                                <img
+                                    src={previewUrl}
+                                    style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                />
+                            </div>
+                            <Button type="primary" onClick={() => handleUpdateAvatar()}>
+                                Save Avatar
+                            </Button>
+                        </>
                     }
                 </>
                 :
