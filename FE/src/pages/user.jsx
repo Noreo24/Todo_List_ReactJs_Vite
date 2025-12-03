@@ -15,20 +15,27 @@ const UserPage = () => {
         {
             _id: '2123123',
             fullName: 'Jim Green',
-            
             email: 'jim.green@example.com',
             phone: '987-654-3210',
             avatar: '21232f297a57a5a743894a0e4a801fc3.png'
         }
     ]);
+    const [current, setCurrent] = useState(1);
+    const [pageSize, setPageSize] = useState(1);
+    const [total, setTotal] = useState(0);
 
     useEffect(() => {
         loadUser();
     }, []);
 
     const loadUser = async () => {
-        const res = await fetchAllUserAPI()
-        // setDataUsers(res.data);
+        const res = await fetchAllUserAPI(current, pageSize);
+        if (res.data) {
+            setDataUsers(res.data.result);
+            setCurrent(res.data.meta.current);
+            setPageSize(res.data.meta.pageSize);
+            setTotal(res.data.meta.total);
+        }
     }
 
     return (
@@ -37,6 +44,11 @@ const UserPage = () => {
             <UserTable
                 dataUsers={dataUsers}
                 loadUser={loadUser}
+                current={current}
+                pageSize={pageSize}
+                total={total}
+                setCurrent={setCurrent}
+                setPageSize={setPageSize}
             />
         </div>
     );
