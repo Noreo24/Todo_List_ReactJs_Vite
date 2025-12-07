@@ -53,8 +53,20 @@ const uploadFileAPI = (file, folder) => {
         }
     }
     const bodyFormData = new FormData();
-    bodyFormData.append("file", file);  
+    bodyFormData.append("file", file);
     return axios.post(URL_BACKEND, bodyFormData, config);
+}
+
+const registerAPI = (fullName, email, password, phone) => {
+    const URL_BACKEND = "/api/v1/user/register";
+    const data = {
+        fullName: fullName,
+        email: email,
+        password: password,
+        phone: phone
+    };
+    // Hoặc data = { fullName, email, password, phone }
+    return axios.post(URL_BACKEND, data);
 }
 
 export {
@@ -63,5 +75,6 @@ export {
     fetchAllUserAPI,
     deleteUserAPI,
     uploadFileAPI,
-    updateUserAvatarAPI
+    updateUserAvatarAPI,
+    registerAPI
 }
