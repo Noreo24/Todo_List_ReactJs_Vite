@@ -1,5 +1,5 @@
-import Header from './components/layouts/header';
-import Footer from './components/layouts/footer';
+import Header from './components/layout/header';
+import Footer from './components/layout/footer';
 import { Outlet } from 'react-router-dom';
 
 // Sử dụng component bên trong component khác

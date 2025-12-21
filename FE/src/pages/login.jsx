@@ -2,22 +2,23 @@ import { ArrowRightOutlined } from "@ant-design/icons";
 import { Button, Col, Flex, Form, Input, Row, Divider, message, notification } from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import { loginAPI } from "../services/api.service";
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { AuthContext } from "../components/context/auth.context";
 
 const LoginPage = () => {
     const [form] = Form.useForm();
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
+    const { setUser } = useContext(AuthContext);
 
     const onFinish = async (values) => {
         setLoading(true);
         const res = await loginAPI(values.email, values.password);
         if (res.data) {
             message.success("Login successfully!");
+            localStorage.setItem("access_token", res.data.access_token);
+            setUser(res.data.user);
             navigate("/");
-            // localStorage.setItem("token", res.data.token);
-            // localStorage.setItem("user", JSON.stringify(res.data.user));
-            // window.location.href = "/";
         } else {
             notification.error({
                 message: "Login failed!",

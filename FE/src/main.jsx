@@ -12,6 +12,7 @@ import './styles/global.css'
 import TodoApp from './components/todo/TodoApp.jsx';
 import ErrorPage from './pages/error.jsx';
 import BookPage from './pages/book.jsx';
+import { AuthWrapper } from './components/context/auth.context.jsx';
 
 const router = createBrowserRouter([
   {
@@ -43,10 +44,11 @@ const router = createBrowserRouter([
   }
 ]);
 
-
 createRoot(document.getElementById('root')).render(
   // <StrictMode> 
   // StrictMode làm React chạy ở chế độ StrictMode (chế độ nghiêm ngặt) - nghĩa là nó sẽ kiểm tra và cảnh báo về các vấn đề tiềm ẩn trong ứng dụng của bạn, giúp bạn phát hiện lỗi sớm hơn trong quá trình phát triển.
-  <RouterProvider router={router} />
+  <AuthWrapper>
+    <RouterProvider router={router} />
+  </AuthWrapper>
   // </StrictMode>,
 )
