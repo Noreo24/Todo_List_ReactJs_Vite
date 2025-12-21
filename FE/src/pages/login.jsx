@@ -1,12 +1,30 @@
 import { ArrowRightOutlined } from "@ant-design/icons";
-import { Button, Col, Flex, Form, Input, Row, Divider } from "antd";
-import { Link } from "react-router-dom";
+import { Button, Col, Flex, Form, Input, Row, Divider, message, notification } from "antd";
+import { Link, useNavigate } from "react-router-dom";
+import { loginAPI } from "../services/api.service";
+import { useState } from "react";
 
 const LoginPage = () => {
     const [form] = Form.useForm();
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
-    const onFinish = (values) => {
-        console.log("Success:", values);
+    const onFinish = async (values) => {
+        setLoading(true);
+        const res = await loginAPI(values.email, values.password);
+        if (res.data) {
+            message.success("Login successfully!");
+            navigate("/");
+            // localStorage.setItem("token", res.data.token);
+            // localStorage.setItem("user", JSON.stringify(res.data.user));
+            // window.location.href = "/";
+        } else {
+            notification.error({
+                message: "Login failed!",
+                description: JSON.stringify(res.message)
+            })
+        }
+        setLoading(false);
     }
 
     return (
@@ -51,7 +69,7 @@ const LoginPage = () => {
 
                         <Form.Item>
                             <Flex justify="space-between" align="center">
-                                <Button type="primary" onClick={() => form.submit()}>
+                                <Button loading={loading} type="primary" onClick={() => form.submit()}>
                                     Login
                                 </Button>
                                 <Link to="/">Go to homepage <ArrowRightOutlined /></Link>
