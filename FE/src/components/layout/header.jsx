@@ -1,5 +1,5 @@
 import { Link, NavLink } from 'react-router-dom'
-import { BookOutlined, HomeOutlined, SettingOutlined, UserOutlined } from '@ant-design/icons';
+import { BookOutlined, DownOutlined, HomeOutlined, IdcardOutlined, LoginOutlined, SettingOutlined, SmileOutlined, UserOutlined } from '@ant-design/icons';
 import { Menu } from 'antd'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
@@ -7,7 +7,7 @@ import { AuthContext } from '../context/auth.context';
 const Header = () => {
 
     const [current, setCurrent] = useState("");
-    const {user} = useContext(AuthContext);
+    const { user } = useContext(AuthContext);
     const onClick = e => {
         console.log("click ", e);
         setCurrent(e.key);
@@ -30,21 +30,29 @@ const Header = () => {
             key: "books",
             icon: <BookOutlined />,
         },
-        {
-            label: "Setting",
-            key: "settings",
-            icon: <SettingOutlined /> ,
-            children: [
-                {
-                    label: <Link to={"/login"}>Login</Link>,
-                    key: "login",
-                },
-                {
-                    label: <Link to={"/logout"}>Logout</Link>,
-                    key: "logout",
-                }
-            ]
-        }
+        ...(!user.id ? [{
+            label: <Link to={"/login"}>Login</Link>,
+            key: "login",
+            icon: <LoginOutlined />,
+        }] : [
+            {
+                label:
+                    <span>
+                        <IdcardOutlined style={{ marginRight: 6 }} />
+                        Welcome, <b>{user.fullName}</b>
+                        <DownOutlined style={{ marginLeft: 6, fontSize: 10 }} />
+                    </span>
+                ,
+                key: "settings",
+                // icon: <IdcardOutlined />,
+                children: [
+                    {
+                        label: <Link to={"/logout"}>Logout</Link>,
+                        key: "logout",
+                    }
+                ]
+            }
+        ]),
     ];
 
     return (

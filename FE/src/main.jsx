@@ -47,6 +47,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById('root')).render(
   // <StrictMode> 
   // StrictMode làm React chạy ở chế độ StrictMode (chế độ nghiêm ngặt) - nghĩa là nó sẽ kiểm tra và cảnh báo về các vấn đề tiềm ẩn trong ứng dụng của bạn, giúp bạn phát hiện lỗi sớm hơn trong quá trình phát triển.
+  // props.children: Code như dưới là truyền props (RouterProvider) vào AuthWrapper và trong AuthWrapper sẽ nhận props này và hiển thị ra
   <AuthWrapper>
     <RouterProvider router={router} />
   </AuthWrapper>
