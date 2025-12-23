@@ -1,4 +1,4 @@
-import { Button, Input, notification, Modal } from "antd";
+import { Button, Input, notification, Modal, message } from "antd";
 import { useState } from "react";
 import { createUserAPI } from "../../services/api.service";
 
@@ -8,15 +8,12 @@ const CreateUserModal = (props) => {
     const [password, setPassword] = useState("");
     const [phone, setPhone] = useState("");
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
-    const loadUser = props;
+    const { loadUser } = props;
 
     const handleSubmit = async () => {
         const response = await createUserAPI(fullName, email, password, phone);
         if (response.data) {
-            notification.success({
-                message: "User created successfully",
-                description: `User ID: ${response.data.id}`
-            })
+            message.success("User created successfully");
             resetForm();
             await loadUser();
         } else {
@@ -41,7 +38,7 @@ const CreateUserModal = (props) => {
                 <h3> Table User</h3>
                 <Button
                     type="primary"
-                    onClick={() => setIsModalCreateOpen(true)}>Submit
+                    onClick={() => setIsModalCreateOpen(true)}>Create
                 </Button>
             </div>
             <Modal

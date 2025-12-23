@@ -23,13 +23,13 @@ const updateUserAPI = (_id, fullName, email, phone) => {
     return axios.put(URL_BACKEND, data);
 }
 
-const updateUserAvatarAPI = (avatar, _id, fullName, phone) => {
+const updateUserAvatarAPI = (_id, fullName, phone, avatar) => {
     const URL_BACKEND = "/api/v1/user";
     const data = {
         _id: _id,
-        avatar: avatar,
         fullName: fullName,
-        phone: phone
+        phone: phone,
+        avatar: avatar
     };
     return axios.put(URL_BACKEND, data);
 }

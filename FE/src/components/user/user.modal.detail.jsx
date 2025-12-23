@@ -1,6 +1,6 @@
-import { Button, Drawer, notification } from "antd";
+import { Button, Drawer, message, notification } from "antd";
 import { useState } from "react";
-import { uploadFileAPI } from "../../services/api.service";
+import { updateUserAvatarAPI, uploadFileAPI } from "../../services/api.service";
 
 const UserDetailModal = (props) => {
 
@@ -28,11 +28,15 @@ const UserDetailModal = (props) => {
 
     const handleUpdateAvatar = async () => {
         // Upload file
+        message.loading("Uploading avatar...");
+        console.log("Selected file to upload:", selectedFile);
         const resUpload = await uploadFileAPI(selectedFile, "avatar");
+        console.log("Upload response:", resUpload);
         if (resUpload.data) {
             const newAvatar = resUpload.data.fileUploaded;
+            console.log("Uploaded avatar filename:", newAvatar);
             // Update user's avatar
-            const resUpdateAvatar = await updateUserAvatarAPI(newAvatar, dataDetail._id, dataDetail.fullName, dataDetail.phone);
+            const resUpdateAvatar = await updateUserAvatarAPI(dataDetail._id, dataDetail.fullName, dataDetail.phone, newAvatar);
             if (resUpdateAvatar.data) {
                 setIsModalDetailOpen(false);
                 setSelectedFile(null);
