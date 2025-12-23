@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { notification, Popconfirm, Table } from "antd";
+import { message, notification, Popconfirm, Table } from "antd";
 import UpdateUserModal from "./user.modal.update";
 import { useState } from "react";
 import UserDetailModal from "./user.modal.detail";
@@ -83,10 +83,7 @@ const UserTable = (props) => {
     const handleDeleteUser = async (id) => {
         const res = await deleteUserAPI(id);
         if (res.data) {
-            notification.success({
-                message: "Delete User",
-                description: "User deleted successfully!"
-            })
+            message.success("Delete user successfully");
             await loadUser();
         } else {
             notification.error({
