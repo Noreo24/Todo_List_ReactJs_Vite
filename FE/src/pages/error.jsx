@@ -5,7 +5,7 @@ export default function ErrorPage() {
     const error = useRouteError();
     return (
         <Result
-            status="403"
+            status="404"
             title="Oops!"
             subTitle={error.statusText || error.message}
             extra={
