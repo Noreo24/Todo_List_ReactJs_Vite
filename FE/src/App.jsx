@@ -3,8 +3,8 @@ import Footer from './components/layout/footer';
 import { Outlet } from 'react-router-dom';
 import { useContext, useEffect } from 'react';
 import { AuthContext } from './components/context/auth.context';
-import { getAccountAPI } from './services/api.service';
 import { Spin } from 'antd';
+import { getAccountAPI } from './services/auth.api';
 
 // Sử dụng component bên trong component khác
 // Component cha (App) sử dụng component con (MyComponent)

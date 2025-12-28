@@ -1,7 +1,7 @@
 import CreateUserModal from "../components/user/user.modal.create";
 import UserTable from "../components/user/user.table";
 import { useEffect, useState } from "react";
-import { fetchAllUserAPI } from "../services/api.service";
+import { fetchAllUserAPI } from "../services/user.api";
 
 const UserPage = () => {
 

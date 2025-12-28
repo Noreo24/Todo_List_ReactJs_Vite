@@ -3,7 +3,7 @@ import { BookOutlined, DownOutlined, HomeOutlined, IdcardOutlined, LoginOutlined
 import { Menu, message } from 'antd'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
-import { logoutAPI } from '../../services/api.service';
+import { logoutAPI } from '../../services/auth.api';
 
 const Header = () => {
 

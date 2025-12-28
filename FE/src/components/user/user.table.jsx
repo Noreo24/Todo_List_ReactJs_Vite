@@ -3,7 +3,7 @@ import { message, notification, Popconfirm, Table } from "antd";
 import UpdateUserModal from "./user.modal.update";
 import { useState } from "react";
 import UserDetailModal from "./user.modal.detail";
-import { deleteUserAPI } from "../../services/api.service";
+import { deleteUserAPI } from "../../services/user.api";
 
 const UserTable = (props) => {
 

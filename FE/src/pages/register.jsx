@@ -1,6 +1,6 @@
 import { Button, Col, Divider, Form, Input, notification, Row } from "antd";
-import { registerAPI } from "../services/api.service";
 import { useNavigate, Link } from "react-router-dom";
+import { registerAPI } from "../services/auth.api";
 
 const RegisterPage = () => {
     const [form] = Form.useForm();

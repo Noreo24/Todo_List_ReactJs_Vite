@@ -1,6 +1,6 @@
 import { Button, Drawer, message, notification } from "antd";
 import { useState } from "react";
-import { updateUserAvatarAPI, uploadFileAPI } from "../../services/api.service";
+import { updateUserAvatarAPI, uploadFileAPI } from "../../services/user.api";
 
 const UserDetailModal = (props) => {
 
