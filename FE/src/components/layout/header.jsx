@@ -1,16 +1,40 @@
-import { Link, NavLink } from 'react-router-dom'
+import { Link, NavLink, useNavigate } from 'react-router-dom'
 import { BookOutlined, DownOutlined, HomeOutlined, IdcardOutlined, LoginOutlined, SettingOutlined, SmileOutlined, UserOutlined } from '@ant-design/icons';
-import { Menu } from 'antd'
+import { Menu, message } from 'antd'
 import { useContext, useState } from 'react';
 import { AuthContext } from '../context/auth.context';
+import { logoutAPI } from '../../services/api.service';
 
 const Header = () => {
 
     const [current, setCurrent] = useState("");
-    const { user } = useContext(AuthContext);
+    const { user, setUser } = useContext(AuthContext);
+    const navigate = useNavigate();
     const onClick = e => {
         setCurrent(e.key);
     };
+
+    const logout = async () => {
+        const response = await logoutAPI();
+        if (response.data) {
+            // Clear user info in context and remove token in localStorage
+            localStorage.removeItem("access_token");
+            setUser({
+                email: "",
+                phone: "",
+                fullName: "",
+                role: "",
+                avatar: "",
+                id: ""
+            });
+            message.success("Logout successful!");
+
+            // Redirect to home page
+            navigate("/");
+        } else {
+            message.error("Logout failed!");
+        }
+    }
 
     const items = [
         {
@@ -46,7 +70,7 @@ const Header = () => {
                 // icon: <IdcardOutlined />,
                 children: [
                     {
-                        label: <Link to={"/logout"}>Logout</Link>,
+                        label: <span onClick={() => logout()}>Logout</span>,
                         key: "logout",
                     }
                 ]
