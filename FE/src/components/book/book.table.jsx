@@ -1,6 +1,7 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
 import { Popconfirm, Table } from "antd";
 import { useState } from "react";
+import BookDetailModal from "./book.modal.detail";
 
 const BookTable = (props) => {
 
@@ -10,18 +11,18 @@ const BookTable = (props) => {
     const [dataDetail, setDataDetail] = useState(null);
     const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
 
-    // const handleDeleteBook = async (id) => {
-    //     const res = await deleteBookAPI(id);
-    //     if (res.data) {
-    //         message.success("Delete book successfully");
-    //         await loadBook();
-    //     } else {
-    //         notification.error({
-    //             message: "Delete Book",
-    //             description: JSON.stringify(res.message)
-    //         })
-    //     }
-    // }
+    const handleDeleteBook = async (id) => {
+        // const res = await deleteBookAPI(id);
+        // if (res.data) {
+        //     message.success("Delete book successfully");
+        //     await loadBook();
+        // } else {
+        //     notification.error({
+        //         message: "Delete Book",
+        //         description: JSON.stringify(res.message)
+        //     })
+        // }
+    }
 
     const onChange = (pagination, filters, sorter, extra) => {
         if (pagination && pagination.current) {
@@ -42,9 +43,7 @@ const BookTable = (props) => {
             title: 'No.',
             render: (_, record, index) => {
                 return (
-                    <>
-                        {(index + 1) + (current - 1) * pageSize}
-                    </>
+                    <>{(index + 1) + (current - 1) * pageSize}</>
                 )
             }
         },
@@ -64,12 +63,23 @@ const BookTable = (props) => {
             }
         },
         {
+            title: 'Picture',
+            dataIndex: 'thumbnail',
+            render: (thumbnail) => (
+                <img src={`${import.meta.env.VITE_BACKEND_URL}/images/book/${thumbnail ?? ""}`}
+                    alt="thumbnail"
+                    style={{ width: 50, height: 50, objectFit: 'cover' }}
+                />
+            )
+        },
+        {
             title: 'Title',
             dataIndex: 'mainText'
         },
         {
             title: 'Price',
-            dataIndex: 'price'
+            dataIndex: 'price',
+            render: (price) => (`${price?.toLocaleString('vi-VN')} VND`)
         },
         {
             title: 'Quantity',
@@ -95,7 +105,7 @@ const BookTable = (props) => {
                         <Popconfirm
                             title="Delete the book"
                             description="Are you sure to delete this book?"
-                            // onConfirm={() => handleDeleteBook(record._id)}
+                            onConfirm={() => handleDeleteBook(record._id)}
                             okText="Yes"
                             cancelText="No"
                             placement="leftTop"
@@ -124,6 +134,14 @@ const BookTable = (props) => {
                     }
                 }
                 onChange={onChange}
+            />
+
+            <BookDetailModal
+                isModalDetailOpen={isModalDetailOpen}
+                setIsModalDetailOpen={setIsModalDetailOpen}
+                dataDetail={dataDetail}
+                setDataDetail={setDataDetail}
+                loadBook={loadBook}
             />
         </>
     );
