@@ -1,7 +1,8 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Popconfirm, Table } from "antd";
+import { Button, Popconfirm, Table } from "antd";
 import { useState } from "react";
 import BookDetailModal from "./book.modal.detail";
+import CreateBookModal from "./book.modal.create";
 
 const BookTable = (props) => {
 
@@ -10,6 +11,7 @@ const BookTable = (props) => {
     const [dataUpdate, setDataUpdate] = useState(null);
     const [dataDetail, setDataDetail] = useState(null);
     const [isModalDetailOpen, setIsModalDetailOpen] = useState(false);
+    const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
     const handleDeleteBook = async (id) => {
         // const res = await deleteBookAPI(id);
@@ -120,6 +122,12 @@ const BookTable = (props) => {
 
     return (
         <>
+            <CreateBookModal
+                isModalCreateOpen={isModalCreateOpen}
+                setIsModalCreateOpen={setIsModalCreateOpen}
+                loadBook={loadBook}
+            />
+
             <Table
                 columns={columns}
                 dataSource={dataBooks}
