@@ -24,31 +24,37 @@ const CreateBookModal = (props) => {
     };
 
     const handleSubmit = async () => {
-        const values = form.getFieldsValue();
-        if (!selectedFile) {
-            notification.error({
-                message: "Create Book",
-                description: "Please select a thumbnail image for the book."
-            });
-            return;
-        }
-        const resUpload = await uploadFileAPI(selectedFile, "book");
-        const response = await createBookAPI(
-            values.title,
-            values.author,
-            values.price,
-            values.category,
-            values.quantity,
-            values.slider,
-            values.sold,
-            resUpload.data ? resUpload.data.fileUploaded : ""
-        );
-        if (response.data) {
-            message.success("Book created successfully");
-            resetForm();
-            await loadBook();
-        } else {
-            message.error("Book creation failed");
+        try {
+            const values = await form.validateFields();
+            // Ensure category is always set to first value if not selected
+            const categoryValue = values.category || 'Arts';
+            if (!selectedFile) {
+                notification.error({
+                    message: "Create Book",
+                    description: "Please select a thumbnail image for the book."
+                });
+                return;
+            }
+            const resUpload = await uploadFileAPI(selectedFile, "book");
+            const response = await createBookAPI(
+                values.title,
+                values.author,
+                values.price,
+                categoryValue,
+                values.quantity,
+                values.slider,
+                values.sold,
+                resUpload.data ? resUpload.data.fileUploaded : ""
+            );
+            if (response.data) {
+                message.success("Book created successfully");
+                resetForm();
+                await loadBook();
+            } else {
+                message.error("Book creation failed");
+            }
+        } catch (error) {
+            // Validation errors are handled by Antd Form automatically
         }
     }
 
@@ -92,20 +98,47 @@ const CreateBookModal = (props) => {
                         slider: ""
                     }}
                 >
-                    <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Please input the title!' }]}>
+                    <Form.Item
+                        label="Title"
+                        name="title"
+                        rules={[
+                            { required: true, message: 'Please input the title!' },
+                            { min: 2, message: 'Title must be at least 2 characters.' },
+                            { max: 100, message: 'Title must be at most 100 characters.' }
+                        ]}
+                    >
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Author" name="author" rules={[{ required: true, message: 'Please input the author!' }]}>
+                    <Form.Item
+                        label="Author"
+                        name="author"
+                        rules={[
+                            { required: true, message: 'Please input the author!' },
+                            { min: 2, message: 'Author must be at least 2 characters.' },
+                            { max: 50, message: 'Author must be at most 50 characters.' }
+                        ]}
+                    >
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Price" name="price" rules={[{ required: true, message: 'Please input the price!' }]}>
+                    <Form.Item
+                        label="Price"
+                        name="price"
+                        rules={[
+                            { required: true, message: 'Please input the price!' },
+                            { type: 'number', min: 0, message: 'Price must be a positive number.' }
+                        ]}
+                    >
                         <InputNumber
                             suffix="VND"
                             style={{ width: "100%" }}
                             formatter={formatter}
                         />
                     </Form.Item>
-                    <Form.Item label="Category" name="category" rules={[{ required: true, message: 'Please select a category!' }]}>
+                    <Form.Item
+                        label="Category"
+                        name="category"
+                        rules={[{ required: true, message: 'Please select a category!' }]}
+                    >
                         <Select
                             style={{ width: "100%" }}
                             allowClear
@@ -124,13 +157,43 @@ const CreateBookModal = (props) => {
                             placeholder="Select category"
                         />
                     </Form.Item>
-                    <Form.Item label="Quantity" name="quantity" rules={[{ required: true, message: 'Please input the quantity!' }]}>
+                    <Form.Item
+                        label="Quantity"
+                        name="quantity"
+                        rules={[
+                            { required: true, message: 'Please input the quantity!' },
+                            { pattern: /^\d+$/, message: 'Quantity must be a positive integer.' },
+                            { validator: (_, value) => value && Number(value) >= 0 ? Promise.resolve() : Promise.reject('Quantity must be >= 0') }
+                        ]}
+                    >
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Sold" name="sold">
+                    <Form.Item
+                        label="Sold"
+                        name="sold"
+                        rules={[
+                            { pattern: /^\d*$/, message: 'Sold must be a non-negative integer.' },
+                            { validator: (_, value) => value === undefined || value === "" || Number(value) >= 0 ? Promise.resolve() : Promise.reject('Sold must be >= 0') }
+                        ]}
+                    >
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Slider" name="slider">
+                    <Form.Item
+                        label="Slider"
+                        name="slider"
+                        rules={[
+                            { required: false },
+                            { max: 500, message: 'Slider value too long.' },
+                            {
+                                validator: (_, value) => {
+                                    // Accept empty, array, or comma-separated string
+                                    if (!value || Array.isArray(value)) return Promise.resolve();
+                                    if (typeof value === 'string') return Promise.resolve();
+                                    return Promise.reject('Slider must be a string or array');
+                                }
+                            }
+                        ]}
+                    >
                         <Input />
                     </Form.Item>
                     <Form.Item label="Thumbnail URL">

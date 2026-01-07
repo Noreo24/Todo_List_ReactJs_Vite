@@ -1,8 +1,10 @@
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
-import { Button, Popconfirm, Table } from "antd";
+import { Button, message, Popconfirm, Table } from "antd";
 import { useState } from "react";
 import BookDetailModal from "./book.modal.detail";
 import CreateBookModal from "./book.modal.create";
+import UpdateBookModal from "./book.modal.update";
+import { deleteBookAPI } from "../../services/book.api";
 
 const BookTable = (props) => {
 
@@ -14,16 +16,16 @@ const BookTable = (props) => {
     const [isModalCreateOpen, setIsModalCreateOpen] = useState(false);
 
     const handleDeleteBook = async (id) => {
-        // const res = await deleteBookAPI(id);
-        // if (res.data) {
-        //     message.success("Delete book successfully");
-        //     await loadBook();
-        // } else {
-        //     notification.error({
-        //         message: "Delete Book",
-        //         description: JSON.stringify(res.message)
-        //     })
-        // }
+        const res = await deleteBookAPI(id);
+        if (res.data) {
+            message.success("Delete book successfully");
+            await loadBook();
+        } else {
+            notification.error({
+                message: "Delete Book",
+                description: JSON.stringify(res.message)
+            })
+        }
     }
 
     const onChange = (pagination, filters, sorter, extra) => {
@@ -149,6 +151,14 @@ const BookTable = (props) => {
                 setIsModalDetailOpen={setIsModalDetailOpen}
                 dataDetail={dataDetail}
                 setDataDetail={setDataDetail}
+                loadBook={loadBook}
+            />
+
+            <UpdateBookModal
+                dataUpdate={dataUpdate}
+                setDataUpdate={setDataUpdate}
+                isModalUpdateOpen={isModalUpdateOpen}
+                setIsModalUpdateOpen={setIsModalUpdateOpen}
                 loadBook={loadBook}
             />
         </>

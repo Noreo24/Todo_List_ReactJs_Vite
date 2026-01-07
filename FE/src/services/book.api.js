@@ -20,7 +20,31 @@ const createBookAPI = (mainText, author, price, category, quantity, slider, sold
     return axios.post(URL_BACKEND, data);
 }
 
+
+const updateBookAPI = (id, mainText, author, price, category, quantity, slider, sold, thumbnail) => {
+    const URL_BACKEND = `/api/v1/book/${id}`;
+    const data = {
+        mainText: mainText,
+        author: author,
+        price: price,
+        category: category,
+        quantity: quantity,
+        slider: slider,
+        sold: sold,
+        thumbnail: thumbnail
+    };
+    return axios.put(URL_BACKEND, data);
+}
+
+const deleteBookAPI = (id) => {
+    const URL_BACKEND = `/api/v1/book/${id}`;
+    return axios.delete(URL_BACKEND);
+}
+
+
 export {
     fetchAllBookAPI,
-    createBookAPI
+    createBookAPI,
+    updateBookAPI,
+    deleteBookAPI
 }
